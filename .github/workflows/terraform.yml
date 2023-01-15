@@ -22,6 +22,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.secret_access_key }}
   AWS_REGION: ${{ inputs.region }}
+  S3_BUCKET: winebarrel-terraform-with-github-actions
 
 jobs:
   terraform:
@@ -56,7 +57,7 @@ jobs:
       - name: Upload plan file to S3
         if: github.event_name == 'pull_request'
         working-directory: ${{ inputs.name }}
-        run: aws s3 cp tfplan-${{ inputs.sha }} s3://winebarrel-terraform-with-github-actions/plan/${{ inputs.name }}/
+        run: aws s3 cp tfplan-${{ inputs.sha }} s3://${{ env.S3_BUCKET }}/plan/${{ inputs.name }}/
       - name: Update Pull Request
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -93,14 +94,12 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
         run: |
-          PULL_REQUEST_SHA=$(git rev-list -n1 --parents ${{ inputs.sha }} | awk '{print $3}')
-          if [[ -n "$PULL_REQUEST_SHA" ]]; then
-            echo "sha=$PULL_REQUEST_SHA" >> $GITHUB_OUTPUT
-          else
+          PULL_REQUEST_SHA=$(git rev-laist -n1 --parents ${{ inputs.sha }} | awk '{print $3}')
+          if [[ -z "$PULL_REQUEST_SHA" ]]; then
             echo "error: Pull Request SHA not found"
             exit 1
           fi
-          aws s3 cp s3://winebarrel-terraform-with-github-actions/plan/${{ inputs.name }}/tfplan-${{ inputs.sha }} ./
+          aws s3 cp s3://${{ env.S3_BUCKET }}/plan/${{ inputs.name }}/tfplan-${PULL_REQUEST_SHA} ./
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
