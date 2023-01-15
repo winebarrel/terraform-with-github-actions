@@ -8,10 +8,6 @@ on:
       sha:
         required: true
         type: string
-      region:
-        required: false
-        default: ap-northeast-1
-        type: string
     secrets:
       access_key_id:
         required: true
@@ -21,7 +17,7 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.access_key_id }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.secret_access_key }}
-  AWS_REGION: ${{ inputs.region }}
+  AWS_REGION: ap-northeast-1
   S3_BUCKET: winebarrel-terraform-with-github-actions
 
 jobs:
