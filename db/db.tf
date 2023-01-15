@@ -12,3 +12,6 @@ resource "null_resource" "prod_db4" {
 
 resource "null_resource" "stg_db" {
 }
+
+resource "null_resource" "stg_db2" {
+}
