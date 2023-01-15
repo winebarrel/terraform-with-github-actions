@@ -9,3 +9,6 @@ resource "null_resource" "stg_db2" {
 
 resource "null_resource" "stg_db3" {
 }
+
+resource "null_resource" "stg_db4" {
+}
