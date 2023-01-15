@@ -1,6 +1,9 @@
 resource "null_resource" "prod_lb" {
 }
 
+resource "null_resource" "prod_lb15" {
+}
+
 resource "null_resource" "prod_lb2" {
 }
 
