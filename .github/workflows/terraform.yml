@@ -88,6 +88,17 @@ jobs:
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
+      - name: Export Pull Request SHA
+        id: export_pr_sha
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          PULL_REQUEST_SHA=$(git rev-list -n1 --parents head | awk '{print $3}')
+          if [[ -n "$PULL_REQUEST_SHA" ]]; then
+            echo "debug: sha=$PULL_REQUEST_SHA"
+            echo "sha=$PULL_REQUEST_SHA" >> $GITHUB_OUTPUT
+          else
+            echo "error: Pull Request SHA not found"
+          fi
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
