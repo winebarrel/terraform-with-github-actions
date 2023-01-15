@@ -90,7 +90,7 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
         run: |
-          PULL_REQUEST_SHA=$(git rev-laist -n1 --parents ${{ inputs.sha }} | awk '{print $3}')
+          PULL_REQUEST_SHA=$(git rev-list -n1 --parents ${{ inputs.sha }} | awk '{print $3}')
           if [[ -z "$PULL_REQUEST_SHA" ]]; then
             echo "error: Pull Request SHA not found"
             exit 1
