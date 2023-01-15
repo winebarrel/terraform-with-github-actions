@@ -89,7 +89,7 @@ runs:
       run: exit 1
     - name: Download plan file from s3
       id: download-plan
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: fromJSON(inputs.main-push)
       shell: bash
       working-directory: ${{ inputs.name }}
       env:
@@ -104,7 +104,7 @@ runs:
         fi
         aws s3 cp s3://${{ inputs.bucket }}/plan/${{ inputs.name }}/tfplan-${PULL_REQUEST_SHA} ./
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: fromJSON(inputs.main-push)
       shell: bash
       working-directory: ${{ inputs.name }}
       run: terraform apply -auto-approve -input=false tfplan-${{ steps.download-plan.outputs.sha }}
