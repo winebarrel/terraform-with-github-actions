@@ -32,4 +32,3 @@ jobs:
       - uses: ./.github/actions/terraform
         with:
           name: lb
-          sha: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
