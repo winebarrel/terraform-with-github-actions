@@ -1,0 +1,31 @@
+name: "Terraform DB"
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/actions/terraform/*"
+      - ".github/workflows/terraform-db2.yml"
+      - "db/*"
+  pull_request:
+    paths:
+      - ".github/actions/terraform/*"
+      - ".github/workflows/terraform-db2.yml"
+      - "db/*"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/terraform
+        with:
+          name: db
