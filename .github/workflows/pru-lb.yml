@@ -13,7 +13,14 @@ jobs:
     name: pru
     runs-on: ubuntu-latest
     steps:
+      - name: Authenticate with GitHub App
+        id: gh-app-auth
+        uses: summerwind/gh-app-auth@main
+        with:
+          app-id: 281788
+          private-key: ${{ secrets.GH_APP_AUTH_PRIVATE_KEY }}
+          account: pru-app
       - uses: winebarrel/pru-action@v0.3.0
         with:
           paths: lb/*
-          github-token: ${{ secrets.PAT }}
+          github-token: ${{ steps.gh-app-auth.outputs.token }}

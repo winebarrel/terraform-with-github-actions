@@ -88,7 +88,7 @@ runs:
       shell: bash
       run: exit 1
     - name: Download plan file from s3
-      id: download_plan
+      id: download-plan
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       shell: bash
       working-directory: ${{ inputs.name }}
@@ -107,4 +107,4 @@ runs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       shell: bash
       working-directory: ${{ inputs.name }}
-      run: terraform apply -auto-approve -input=false tfplan-${{ steps.download_plan.outputs.sha }}
+      run: terraform apply -auto-approve -input=false tfplan-${{ steps.download-plan.outputs.sha }}
