@@ -92,7 +92,7 @@ jobs:
         id: export_pr_sha
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          PULL_REQUEST_SHA=$(git rev-list -n1 --parents head | awk '{print $3}')
+          PULL_REQUEST_SHA=$(git rev-list -n1 --parents ${inputs.sha} | awk '{print $3}')
           if [[ -n "$PULL_REQUEST_SHA" ]]; then
             echo "debug: sha=$PULL_REQUEST_SHA"
             echo "sha=$PULL_REQUEST_SHA" >> $GITHUB_OUTPUT
