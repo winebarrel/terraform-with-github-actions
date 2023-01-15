@@ -7,6 +7,9 @@ resource "null_resource" "prod_lb15" {
 resource "null_resource" "prod_lb2" {
 }
 
+resource "null_resource" "prod_lb3" {
+}
+
 resource "null_resource" "prod_lb10" {
 }
 
