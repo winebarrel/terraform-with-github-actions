@@ -48,7 +48,7 @@ jobs:
           echo "tfplan=tfplan-${{ inputs.sha }}" >> $GITHUB_OUTPUT
         continue-on-error: true
       - name: Upload plan file to S3
-        run:  aws s3 cp ${{ steps.plan.outputs.tfplan }} s3://winebarrel-terraform-with-github-actions/plan/
+        run:  aws s3 cp ${{ steps.plan.outputs.tfplan }} s3://winebarrel-terraform-with-github-actions/plan/${{ inputs.name }}/
       - name: Update Pull Request
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
