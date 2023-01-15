@@ -5,6 +5,9 @@ on:
       name:
         required: true
         type: string
+      sha:
+        required: true
+        type: string
     secrets:
       access_key_id:
         required: true
@@ -40,7 +43,7 @@ jobs:
         id: plan
         if: github.event_name == 'pull_request'
         working-directory: ${{ inputs.name }}
-        run: terraform plan -no-color -input=false
+        run: terraform plan -no-color -input=false -out=tfplan-${{ inputs.sha }}
         continue-on-error: true
       - name: Update Pull Request
         uses: actions/github-script@v6

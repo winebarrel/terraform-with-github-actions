@@ -17,6 +17,7 @@ jobs:
     uses: winebarrel/terraform-with-github-actions/.github/workflows/terraform.yml@main
     with:
       name: lb
+      sha: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
     secrets:
       access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
