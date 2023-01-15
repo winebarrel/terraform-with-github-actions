@@ -16,3 +16,4 @@ jobs:
       - uses: winebarrel/pru-action@v0.3.0
         with:
           paths: db/*
+          github-token: ${{ secrets.PAT }}

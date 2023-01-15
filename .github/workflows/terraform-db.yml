@@ -5,12 +5,12 @@ on:
       - main
     paths:
       - ".github/actions/terraform/*"
-      - ".github/workflows/terraform-db2.yml"
+      - ".github/workflows/terraform-db.yml"
       - "db/*"
   pull_request:
     paths:
       - ".github/actions/terraform/*"
-      - ".github/workflows/terraform-db2.yml"
+      - ".github/workflows/terraform-db.yml"
       - "db/*"
 
 permissions:
@@ -32,3 +32,4 @@ jobs:
       - uses: ./.github/actions/terraform
         with:
           name: db
+          sha: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
