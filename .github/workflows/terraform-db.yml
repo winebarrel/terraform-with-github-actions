@@ -1,0 +1,22 @@
+name: "Terraform DB"
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform.yml
+      - .github/workflows/terraform-db.yml
+      - "db/*"
+  pull_request:
+    paths:
+      - .github/workflows/terraform.yml
+      - .github/workflows/terraform-db.yml
+      - "db/*"
+jobs:
+  terraform:
+    uses: winebarrel/terraform-with-github-actions/.github/workflows/terraform.yml@main
+    with:
+      name: db
+    secrets:
+      access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

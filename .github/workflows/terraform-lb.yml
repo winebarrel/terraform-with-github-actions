@@ -1,0 +1,22 @@
+name: "Terraform LB"
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform.yml
+      - .github/workflows/terraform-lb.yml
+      - "lb/*"
+  pull_request:
+    paths:
+      - .github/workflows/terraform.yml
+      - .github/workflows/terraform-lb.yml
+      - "lb/*"
+jobs:
+  terraform:
+    uses: winebarrel/terraform-with-github-actions/.github/workflows/terraform.yml@main
+    with:
+      name: lb
+    secrets:
+      access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
