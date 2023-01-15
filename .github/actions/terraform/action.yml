@@ -6,7 +6,12 @@ inputs:
     required: true
   sha:
     description: "head commit hash"
-    required: true
+    default: ${{ github.event_name == 'push' && github.sha || github.event.pull_request.head.sha }}
+    required: false
+  main-push:
+    description: "true if push to the main branch"
+    default: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+    required: false
   bucket:
     description: "S3 bucket name"
     default: winebarrel-terraform-with-github-actions
