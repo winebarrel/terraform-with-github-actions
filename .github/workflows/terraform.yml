@@ -87,11 +87,14 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
       - name: Download plan file from s3
+        id: download_plan
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
         run: |
           PULL_REQUEST_SHA=$(git rev-list -n1 --parents ${{ inputs.sha }} | awk '{print $3}')
-          if [[ -z "$PULL_REQUEST_SHA" ]]; then
+          if [[ -n "$PULL_REQUEST_SHA" ]]; then
+            echo "sha=$PULL_REQUEST_SHA" >> $GITHUB_OUTPUT
+          else
             echo "error: Pull Request SHA not found"
             exit 1
           fi
@@ -99,4 +102,4 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
-        run: terraform apply -auto-approve -input=false tfplan-${{ inputs.sha }}
+        run: terraform apply -auto-approve -input=false tfplan-${{ steps.download_plan.outputs.sha }}
