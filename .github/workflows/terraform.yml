@@ -52,12 +52,11 @@ jobs:
         working-directory: ${{ inputs.name }}
         run: |
           terraform plan -no-color -input=false -out=tfplan-${{ inputs.sha }}
-          echo "tfplan=tfplan-${{ inputs.sha }}" >> $GITHUB_OUTPUT
         continue-on-error: true
       - name: Upload plan file to S3
         if: github.event_name == 'pull_request'
         working-directory: ${{ inputs.name }}
-        run: aws s3 cp ${{ steps.plan.outputs.tfplan }} s3://winebarrel-terraform-with-github-actions/plan/${{ inputs.name }}/
+        run: aws s3 cp tfplan-${{ inputs.sha }} s3://winebarrel-terraform-with-github-actions/plan/${{ inputs.name }}/
       - name: Update Pull Request
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -90,9 +89,9 @@ jobs:
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
-      - name: Export Pull Request SHA
-        id: export_pr_sha
+      - name: Download plan file from s3
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: ${{ inputs.name }}
         run: |
           PULL_REQUEST_SHA=$(git rev-list -n1 --parents ${{ inputs.sha }} | awk '{print $3}')
           if [[ -n "$PULL_REQUEST_SHA" ]]; then
@@ -101,7 +100,8 @@ jobs:
             echo "error: Pull Request SHA not found"
             exit 1
           fi
+          aws s3 cp s3://winebarrel-terraform-with-github-actions/plan/${{ inputs.name }}/tfplan-${{ inputs.sha }} ./
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ${{ inputs.name }}
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false tfplan-${{ inputs.sha }}
