@@ -18,3 +18,5 @@ resource "null_resource" "stg_db4" {
 
 resource "null_resource" "stg_db5" {
 }
+
+# comment
